@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+ 
+<script>
+
+
+
+$(document).ready(function(){
+	$("#print").click(function(){
+		 window.print();
+	});
+	$("#voice").hide();
+	$("#ales").hide();
+	$("#invoice").hover(function(){
+		$("#voice").slideDown();
+	});
+	$("#invoice").mouseleave(function(){
+		$("#voice").slideUp();
+	});
+	$("#sales").hover(function(){
+		$("#ales").slideDown();
+	});
+	$("#sales").mouseleave(function(){
+		$("#ales").slideUp();
+	});
+});
+</script>
+</head>
+
+<body style="width:99%; font-family:Arial, Helvetica, sans-serif;">
+<div style="background:#000; box-shadow: 0px 0px 15px 0px #000; position:fixed; width:100%; margin:-10px 0px 0px -8px; height:30px;"></div>
+
+<div style="margin:0px 0px 0px -10px;  padding:30px 0px 0px 0px;   width:100%; overflow:hidden;" >
+<div style="display:inline-block; float:left; position:fixed;    width:200px; height:auto;">
+<div id="invoice" style="display:table-row; cursor:pointer;  ">
+<a href="Invoice.html"  style=" width:15px;  text-decoration:none; margin:1px 0px 0px 0px; padding:15px 20px 15px 25px; font-weight:bold; font-size:24px; color:#FFF; background-color:#014037; float:left; ">I</a>
+<span id="voice" style="font-weight:bold; cursor:pointer; margin:1.4px 0px 0px 0px; padding:16px 20px 17px 5px; font-size:22px; color:#FFF; background-color:#014037; display:inline-block; float:right;">Ivoice</span>
+</div>
+<div style="clear:both; overflow:hidden;"></div>
+<div  id="sales"  style="display:table-row; overflow:hidden;  " >
+<a href="Sales.html" style=" width:15px; text-decoration:none; color:#FFF; font-weight:bold; font-size:24px; float:left; padding:15px 20px 15px 25px; margin:10px 0px 0px 0px; background-color:#008c81; ">S</a>
+<span id="ales" style="font-weight:bold; margin:10px 0px 0px 0px; padding:16px 20px 17px 5px; cursor:pointer; font-size:22px; color:#FFF; background-color:#008c81; display:inline-block; float:right;">Sales</span>
+</div>
+</div>
+
+<div style="display:inline-block; box-shadow: 0px 0px 1px 0px #000; margin-left:100px; background-color:#FFF;  width:90%; height:auto;">
+<div style="display:block; height:10px; width:100%; overflow:hidden; background:#000;">
+<div style="display:inline-block; height:10px; width:20%; overflow:hidden; background:#008c81; float:left;"></div>
+<div style="display:inline-block; height:10px; width:20%; overflow:hidden; background:#014037; float:left;"></div>
+<div style="display:inline-block; height:10px; width:20%; overflow:hidden; background:#008c81; float:left;"></div>
+<div style="display:inline-block; height:10px; width:20%; overflow:hidden; background:#014037; float:left;"></div>
+<div style="display:inline-block; height:10px; width:20%; overflow:hidden; background:#008c81; float:left;"></div>
+</div>
+<!-- header -->
+<div style="width:100%; margin:10px 0px 0px 0px; overflow:hidden; height:auto;">
+<img src="Assets/logo.jpg"/>
+</div>
+
+</div>
+</body>
+</html>

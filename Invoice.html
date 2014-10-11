@@ -1,0 +1,669 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+<title>Untitled Document</title>
+<style>
+@media screen {
+	body{
+		width:99%; font-family:Arial, Helvetica, sans-serif;
+	}
+    p {
+        font-family: verdana,sans-serif;
+        font-size: 14px;
+    }
+	.maintop{
+		display:inline-block; box-shadow: 0px 0px 1px 0px #000; margin-left:100px; background-color:#FFF;  width:90%; height:auto;
+	}
+	.mainbordercontent{
+		display:block; height:10px; width:100%; overflow:hidden; background:#000;
+	}
+	.mainlayereone{
+		display:inline-block; height:10px; width:20%; overflow:hidden; background:#008c81; float:left;
+	}
+	.mainlayertwo{
+		display:inline-block; height:10px; width:20%; overflow:hidden; background:#014037; float:left;
+	}
+	.tbltop{
+		width:30%; overflow:hidden; float:left; display:inline; height:200px; background:#014037 ;
+	}
+	.mainleft
+	{
+		display:inline-block; float:left; position:fixed;    width:200px; height:auto;
+	}
+	.form{
+		width:100%;  box-shadow: 0px 2px 5px 0px #000; height:200px; overflow:hidden;  margin:10px 0px 0px 0px; background:#00F;
+	}
+	.totalborder
+	{
+		width:99.8%; overflow:hidden; border:thin solid #008c81;  margin:0px 0px 0px 0px;
+	}
+	.topfixed
+	{
+		background:#000; box-shadow: 0px 0px 15px 0px #000; position:fixed; width:100%; margin:-10px 0px 0px -8px; height:30px;
+	}
+	.payform
+	{
+		width:30%; padding:10px 10px 10px 10px;  float:left; display:inline-block;
+	}
+	.cusform
+	{
+		width:30%;  margin:0px auto 0px auto; padding:10px 10px 10px 10px; background:#FFF;  display:inline-block;
+	}
+	.staffform
+	{
+		width:30% ; padding:10px 10px 10px 10px; background:#FFF; float:left; display:inline-block;
+	}
+	.priceblock
+	{
+		width:30%; overflow:hidden; padding:10px 0px 10px 0px;  display:inline-block; float:right; background-color:#014037;
+	}
+}
+
+@media print {
+    p {
+        font-size: 20px;
+        color: red;
+    }
+	.maintop{
+		display:inline-block; box-shadow: 0px 0px 0px 0px #000; margin-left:0px; background-color:#FFF;  width:100%; height:auto;
+	}
+	.mainbordercontent{
+		display:block; height:10px; width:100%; overflow:hidden;
+	}
+	.mainlayereone{
+		display:inline-block; height:10px; width:20%; overflow:hidden; background:#008c81; float:left;
+	}
+	.mainlayertwo{
+		display:inline-block; height:10px; width:20%; overflow:hidden; background:#014037; float:left;
+	}
+	.tbltop{
+		width:30%; overflow:hidden; float:left; display:inline; height:200px; background:#014037 ;
+	}
+	.mainleft
+	{
+		display:none; float:left; position:fixed;    width:200px; height:auto;
+	}
+	.form{
+		width:100%;  box-shadow: 0px 0px 0px 0px #000; height:200px; overflow:hidden;  margin:10px 0px 0px 0px; background:#00F;
+	}
+	.totalborder
+	{
+		width:99.8%; overflow:hidden;  margin:0px 0px 0px 0px;
+	}
+	.topfixed
+	{
+		display:none;
+	}
+	.payform
+	{
+		width:100%; margin:20px 0px 0px 0px; padding:10px 10px 10px 10px; display:block;
+	}
+	.cusform
+	{
+		width:100%;  margin:50px auto 0px auto; padding:10px 10px 10px 10px; background:#FFF;  display:block;
+	}
+	.staffform
+	{
+		width:100% ;  margin:5px auto 0px auto; padding:10px 10px 10px 10px; background:#FFF; float:left; display:block;
+	}
+	.priceblock
+	{
+		width:30%; overflow:hidden; padding:10px 0px 11px 0px;  display:inline-block; float:right; background-color:#014037;
+	}
+}
+</style>
+ <script src="Script/jquery1.10.2.js"></script>
+ <script type="text/javascript">
+     var canvas, ctx, flag = false,
+    prevX = 0,
+    currX = 0,
+    prevY = 0,
+    currY = 0,
+    dot_flag = false;
+
+     var x = "black",
+    y = 2;
+
+     function init() {
+         canvas = document.getElementById('can');
+         ctx = canvas.getContext("2d");
+         w = canvas.width;
+         h = canvas.height;
+
+         canvas.addEventListener("mousemove", function (e) {
+             findxy('move', e)
+         }, false);
+         canvas.addEventListener("mousedown", function (e) {
+             findxy('down', e)
+         }, false);
+         canvas.addEventListener("mouseup", function (e) {
+             findxy('up', e)
+         }, false);
+         canvas.addEventListener("mouseout", function (e) {
+             findxy('out', e)
+         }, false);
+     }
+
+     function color(obj) {
+         switch ("black") {
+             case "black":
+                 x = "black";
+                 break;
+             case "white":
+                 x = "white";
+                 break;
+         }
+         if (x == "white") y = 14;
+         else y = 2;
+
+     }
+
+     function draw() {
+         ctx.beginPath();
+         ctx.moveTo(prevX, prevY);
+         ctx.lineTo(currX, currY);
+         ctx.strokeStyle = x;
+         ctx.lineWidth = y;
+         ctx.stroke();
+         ctx.closePath();
+     }
+
+     function erase() {
+         var m = confirm("Want to clear");
+         if (m) {
+             ctx.clearRect(0, 0, w, h);
+             document.getElementById("canvasimg").style.display = "none";
+         }
+     }
+
+     function save() {
+         var idd = document.getElementById('btn').value;
+         if (idd == "save") {
+             var dataURL = document.getElementById('can').toDataURL("image/png");
+
+             dataURL = dataURL.replace("image/png", "image/octet-stream");
+             document.location.href = dataURL;
+             var sa = canvas.toDataURL();
+             document.getElementById("canvasimg").src = sa;
+             document.getElementById("canvasimg").style.display = "inline";
+         }
+         else {
+             var dataURL = document.getElementById('can').toDataURL("image/png");
+
+             dataURL = dataURL.replace("image/png", "image/octet-stream");
+             document.location.href = dataURL;
+             var sa = canvas.toDataURL();
+             document.getElementById("canvasimg1").src = sa;
+             document.getElementById("canvasimg1").style.display = "inline";
+         }
+     }
+
+     function findxy(res, e) {
+         if (res == 'down') {
+             prevX = currX;
+             prevY = currY;
+             currX = e.clientX - canvas.offsetLeft;
+             currY = e.clientY - canvas.offsetTop;
+
+             flag = true;
+             dot_flag = true;
+             if (dot_flag) {
+                 ctx.beginPath();
+                 ctx.fillStyle = x;
+                 ctx.fillRect(currX, currY, 2, 2);
+                 ctx.closePath();
+                 dot_flag = false;
+             }
+         }
+         if (res == 'up' || res == "out") {
+             flag = false;
+         }
+         if (res == 'move') {
+             if (flag) {
+                 prevX = currX;
+                 prevY = currY;
+                 currX = e.clientX - canvas.offsetLeft;
+                 currY = e.clientY - canvas.offsetTop;
+                 draw();
+             }
+         }
+     }
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "invoice.asmx/DynamicInvoiceNo",
+            data: "{}",
+            dataType: "json",
+            success: function (data) {
+                var obj = data.d;
+                $("$lblinv").text(obj);
+                alert(obj);
+            },
+            error: function (result) {
+                alert(result);
+            }
+        });
+
+
+        var tdate = new Date();
+        var dd = tdate.getDate();
+        var MM = tdate.getMonth();
+        var yyyy = tdate.getFullYear();
+        var date = dd + "-" + (MM + 1) + "-" + yyyy;
+        $("#lbldate").text('Date : ' + date);
+        $("#txtsdate").val(date);
+        $("#txtcdate").val(date);
+        $("#print").click(function () {
+            $("#print").hide();
+            $("#submit").hide();
+            window.print();
+        });
+        $("#btn").click(function () {
+            $("#sigplace").css("visibility", "collapse");
+        });
+
+        $("#Sig").click(function () {
+            $("#sigplace").css("visibility", "visible");
+            $("#btn").val("save");
+        });
+
+        $("#Sig1").click(function () {
+            $("#sigplace").css("visibility", "visible");
+            $("#btn").val("save1");
+        });
+
+        $("#voice").hide();
+        $("#ales").hide();
+        $("#invoice").hover(function () {
+            $("#voice").slideDown();
+        });
+        $("#invoice").mouseleave(function () {
+            $("#voice").slideUp();
+        });
+        $("#sales").hover(function () {
+            $("#ales").slideDown();
+        });
+        $("#sales").mouseleave(function () {
+            $("#ales").slideUp();
+        });
+        $("#txtdec").focus(function () {
+            var tee = $("#txtdec").val();
+            if (tee == 'Product Description :') {
+                $("#txtdec").val('');
+            }
+        });
+        $("#txtdec").blur(function () {
+            var tee = $("#txtdec").val();
+            if (tee == "") {
+                $("#txtdec").val('Product Description :');
+
+            }
+        });
+        $("#submit").click(function () {
+            var pre = $("#txtpre").val();
+            var dec = $("#txtdec").val();
+            var pay = $("#txtpay").val();
+            var cname = $("#txtcname").val();
+            var cnri = $("#txtcnri").val();
+            var cadd = $("#txtcadd").val();
+            var cdate = $("#txtcdate").val();
+            var sname = $("#txtsname").val();
+            var snri = $("#txtsnri").val();
+            var sadd = $("#txtsadd").val();
+            var sdate = $("#txtsdate").val();
+            if (pre != '' && dec != '' && pay != '' && cname != '' && cnri != '' && cadd != '' && cdate != '' && sname != '' && snri != '' && sadd != '' && sdate != '') {
+                $("#lblpre").text("Prepared for " + $("#txtpre").val());
+                $("#txtpre").val();
+                $("#txtpre").hide();
+                $("#lblpro").text("Project Type " + $("#txtpro").val());
+                $("#txtpro").val();
+                $("#txtpro").hide();
+                $("#lblinv").text();
+                $("#lblproduct").text($("#txtproduct").val());
+                $("#txtproduct").hide();
+                $("#lbldec").text("" + $("#txtdec").val() + "");
+                $("#txtdec").hide();
+                $("#lblpay").text($("#txtpay").val());
+                $("#txtpay").hide();
+                $("#txtdue").text();
+                $("#lblcname").text($("#txtcname").val());
+                $("#txtcname").hide();
+                $("#lblsname").text($("#txtsname").val());
+                $("#txtsname").hide();
+                $("#lblsnri").text($("#txtsnri").val());
+                $("#txtsnri").hide();
+                $("#lblcnri").text($("#txtcnri").val());
+                $("#txtcnri").hide();
+                $("#lblcno").text($("#txtcno").val());
+                $("#txtcno").hide();
+                $("#lblsno").text($("#txtsno").val());
+                $("#txtsno").hide();
+                $("#lblsdate").text($("#txtsdate").val());
+                $("#txtsdate").hide();
+                $("#lblcdate").text($("#txtcdate").val());
+                $("#txtcdate").hide();
+                var csign1 = $("#canvasimg1").val();
+                var ssign1 = $("#canvasimg").val();
+                $("#Sig").hide();
+                $("#Sig1").hide();
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "invoice.asmx/InsertInvoice",
+                    data: "{'invno':'" + invno1 + "','prefor':'" + prefor1 + "','proname':'" + proname1 + "','prod':'" + product1 + "','prodes':'" + prodes1 + "','price':' 15000 ','payamount':'" + payamount1 + "','dueamount':'" + dueamount1 + "','sname':'" + sname1 + "','snri':'" + snri1 + "','scontno':'" + scontno1 + "' ,'sdate':'" + sdate1 + "','ssign':'" + ssign1 + "','cname':'" + cname1 + "','cnri':'" + cnri1 + "','ccontno':'" + ccontno1 + "','cdate':'" + cdate1 + "','csign':'" + csign1 + "'}",
+                    dataType: "json",
+                    success: function (data) {
+                        var obj = data.d;
+                        if (obj == 'true') {
+                            alert("inserted");
+
+                        }
+                    },
+                    error: function (result) {
+                        alert(result);
+                    }
+                });
+
+            }
+            else {
+                alert("Enter all value");
+                return false;
+            }
+
+
+        });
+        $("#txtpay").blur(function () {
+            var pay = $("#txtpay").val();
+            var a = parseInt(pay);
+            var b = 15000;
+            var countcal = b - a;
+            if (parseInt(countcal) >= 0) {
+                $("#txtdue").text(countcal);
+            }
+            else {
+                $("#txtdue").text("Invalid Amount");
+                $("#txtpay").val(0);
+            }
+        });
+
+        $("#txtcno").blur(function () {
+            var txtcontact = $("#txtcno").val();
+            var pattern1 = /^\d{10}$/;
+            if (!pattern1.test(txtcontact)) {
+                $('#lblcnoerr').html("* Enter the mobile number");
+                $('#lblcnoerr').css("color", "#F00");
+                $("#txtcno").val('');
+
+            }
+            else {
+
+                $('#lblcnoerr').html("");
+                $('#lblcnoerr').css("color", "#060");
+
+
+            }
+        });
+        $("#txtsno").blur(function () {
+            var txtcontact = $("#txtsno").val();
+            var pattern1 = /^\d{10}$/;
+            if (!pattern1.test(txtcontact)) {
+                $('#lblsnoerr').html("* Enter the mobile number");
+                $('#lblsnoerr').css("color", "#F00");
+                $("#txtsno").val('');
+
+            }
+            else {
+
+                $('#lblsnoerr').html("");
+                $('#lblsnoerr').css("color", "#060");
+
+
+            }
+        });
+    });
+</script>
+</head>
+
+<body onLoad="init()" >
+
+<div id="sigplace" style="width:100%; height:600px; position:fixed; visibility:collapse; margin:-10px 0px 0px -8px; top:80px; background-color:#CFF;"> 
+ <canvas id="can" width="600" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
+  <input type="button" value="save" id="btn" size="50"  onClick="save()" style=" padding:10px 10px 10px 10px; color:#FFF; font-size:20px; background-color:#C09; position:absolute;top:90%;left:10%;"/>
+    <input type="button" value="clear" id="clr" size="50" onClick="erase()" style= " padding:10px 10px 10px 10px; color:#FFF; font-size:20px;position:absolute; background-color:#C09; top:90%;left:15%;"/>
+</div>
+<div class="topfixed"></div>
+
+<div style="margin:0px 0px 0px -10px;  padding:30px 0px 0px 0px;   width:100%; overflow:hidden;" >
+<div class="mainleft">
+<div id="invoice" style="display:table-row; cursor:pointer;  ">
+<a href="Invoice.html"  style=" width:15px;  text-decoration:none; margin:1px 0px 0px 0px; padding:15px 20px 15px 25px; font-weight:bold; font-size:24px; color:#FFF; background-color:#014037; float:left; ">I</a>
+<span id="voice" style="font-weight:bold; cursor:pointer; margin:1.4px 0px 0px 0px; padding:16px 20px 17px 5px; font-size:22px; color:#FFF; background-color:#014037; display:inline-block; float:right;">Ivoice</span>
+</div>
+<div style="clear:both; overflow:hidden;"></div>
+<div  id="sales"  style="display:table-row; overflow:hidden;  " >
+<a href="Sales.html"style=" width:15px; text-decoration:none; color:#FFF; font-weight:bold; font-size:24px; float:left; padding:15px 20px 15px 25px; margin:10px 0px 0px 0px; background-color:#008c81; ">S</a>
+<span id="ales" style="font-weight:bold; margin:10px 0px 0px 0px; padding:16px 20px 17px 5px; cursor:pointer; font-size:22px; color:#FFF; background-color:#008c81; display:inline-block; float:right;">Sales</span>
+</div>
+</div>
+
+<div class="maintop">
+<div class="mainbordercontent">
+<div class="mainlayereone"></div>
+<div class="mainlayertwo"></div>
+<div class="mainlayereone"></div>
+<div class="mainlayertwo"></div>
+<div class="mainlayereone"></div>
+</div>
+<!-- header -->
+<div style="width:100%; margin:10px 0px 0px 0px; overflow:hidden; height:auto;">
+<img src="Assets/logo.jpg"/>
+</div>
+<!-- form -->
+<div class="form">
+<!-- left -->
+<div style="width:30%; overflow:hidden; float:left; display:inline; height:200px; background:#014037 ;">
+<div style="margin:100px 0px 0px 0px;">
+<div style="width:100%; display:block; padding:2px 0px 2px 20px; ">
+<label id="lbldate" style="color:#FFF; font-weight:bold; font-size:20px;">Date : 22 - 06 - 2014</label>
+</div>
+<div style="width:100%; display:block; padding:2px 0px 2px 20px; ">
+<label style="color:#FFF; font-weight:bold; font-size:20px;">Invoice no. : </label>
+<label id="lblinv" style="color:#FFF; font-weight:bold; font-size:20px;">0</label>
+
+</div>
+</div>
+</div>
+<!-- right -->
+<div style="width:70%; overflow:hidden; float:right; display:inline; height:200px; background:#008c81;">
+<div style="width:100%;  display:block; padding:15px 0px 0px 20px; ">
+<label style="color:#FFF;  font-weight:bold; font-size:20px;">ZERODOTONE • REGISTRATION NUMBER: 53262873W </label>
+</div>
+<div style="width:90%;  display:block; padding:30px 0px 0px 20px; ">
+<label  style="color:#FFF; float:right;  margin:0px 0px 0px 0px font-weight:bolder; font-size:30px;">INVOICE </label>
+</div>
+
+<div style="width:90%;  display:block; padding:30px 0px 0px 20px; margin:20px 0px 0px 0px; ">
+<label id="lblpro" style="color:#FFF; float:right; margin:0px 0px 0px 0px font-weight:bolder; font-size:16px;">Project : <input id="txtpro"  type="text" placeholder=" Project type" style="border:none; padding:3px 0px 3px 10px; font-size:16px; " /> </label>
+<label id="lblpre" style="color:#FFF; float:right; margin:0px 0px 0px 0px font-weight:bolder; font-size:16px;"> Prepared for <input id="txtpre"  type="text" placeholder=" Prepared For" style="border:none; padding:3px 0px 3px 10px; font-size:16px; " /> </label>
+
+</div>
+</div>
+</div>
+<!-- Header end -->
+<!-- tabel start -->
+<!-- tabelheader start -->
+<div style="width:100%; overflow:hidden;  margin:20px 0px 0px 0px;">
+<!-- tabelheaderleft start -->
+<div style="width:70%; overflow:hidden; padding:10px 0px 10px 0px;  display:inline-block; float:left; background-color:#008c81;">
+<label style="color:#FFF; padding:0px 0px 0px 20px;  font-weight:bold; font-size:20px;">PRODUCT</label></div>
+<!-- tabelheaderleft end -->
+<!-- tabelheaderright start -->
+<div class="priceblock">
+<label style="color:#FFF; padding:0px 20px 0px 0px; float:right;  font-weight:bold; font-size:20px;">PRICE</label></div>
+<!-- tabelheaderright end -->
+</div>
+<!-- tabelheader end -->
+
+<!-- tabelcontent start -->
+<div style="width:100%; overflow:hidden;  margin:0px 0px 0px 0px;">
+<!-- tabelcontentleft start -->
+<div style="width:65%; overflow:hidden; padding:10px 0px 10px 0px; margin:0px 10px 0px 20px;   display:inline-block; float:left;">
+<label id="lblproduct" style="font-size:16px; margin:20px 20px 0px 30px;  white-space:pre-line;   font-weight:bold; color:#000;"></label>
+<label id="lbldec" style="font-size:16px; margin:20px 20px 0px 30px;  white-space:pre-line;   font-weight:bold; color:#000;"></label>
+<input id="txtproduct" type="text"  placeholder="Enter the Product" style="width:90%; overflow:auto; padding:10px 10px 10px 30px; font-size:16px;  font-weight:bold;" />
+<textarea id="txtdec" style="width:90%; overflow:auto; padding:10px 10px 10px 30px; resize:none; border:none;  height:250px; font-size:16px;  font-weight:bold;">Product Description :</textarea>
+</div>
+<!-- tabelcontentleft end -->
+<!-- tabelcontentright start -->
+<div style="width:30%; overflow:hidden; padding:10px 0px 10px 0px;  display:inline-block; float:right; background-color:#e1eded;">
+<label style="color:#000; padding:0px 20px 0px 0px; float:right;  font-weight:bold; font-size:16px;">SGD 15000.0</label></div>
+<!-- tabelcontentrright end -->
+</div>
+<!-- tabelcontent end -->
+
+<!-- tabeltotal start -->
+<div class="totalborder">
+<!-- tabeltotalleft start -->
+<div style="width:68%; overflow:hidden; padding:10px 0px 10px 0px;  display:inline-block; float:left; background-color:#FFF;">
+<label style="color:#008c81; padding:0px 0px 0px 20px;  font-weight:bold; font-size:16px;">----------------------TOTAL COST ------------------------</label></div>
+<!-- tabeltotalleft end -->
+<!-- tabeltotalright start -->
+<div style="width:30%; overflow:hidden; padding:10px 0px 10px 0px;  display:inline-block; float:right; background-color:#e1eded;  ">
+<label style="color:#000; padding:0px 20px 0px 0px; float:right;  font-weight:bold; font-size:16px;">SGD  15000 /-</label></div
+><!-- tabeltotalrright end -->
+</div>
+<!-- tabeltotal end -->
+<!-- tabel end-->
+
+<!-- field start-->
+<div style="width:100%; height:auto; margin:0px auto 0px auto; overflow:hidden;"">
+
+<!-- paymentdetail start-->
+<div class="payform">
+<div style="width:100%; display:block; overflow:hidden;
+padding:10px 0px 10px 0px;  box-shadow: 0px 0.5px 0px 0px #000; background:#000; ">
+<label style="color:#FFF; margin:0px 0px 0px 10px; font-weight:bold; font-size:16px; text-decoration:underline;">PAYMENT DETAILS  </label>
+</div>
+<div style="width:100%; margin:20px 0px 0px 0px; display:block; ">
+<label style="color:#000;  font-weight:bold; font-size:16px;">EXPENSE INCURRED  :</label>
+<label id="lblprice" style="color:#000;  font-weight:bold; font-size:16px;">15000</label>
+  </div>
+<div style="width:100%; margin:20px 0px 0px 0px; display:block; ">
+<label style="color:#000;  font-weight:bold; font-size:16px;">AMOUNT COLLECTED :</label>
+<label id="lblpay" style="color:#000; font-weight:bold; font-size:16px;"></label>
+<input type="text" id="txtpay" placeholder="Enter the Amount" style="border:1px #000 solid; padding:3px 0px 3px 10px; font-size:16px; " />
+</div>
+<div style="width:100%; display:block; margin:20px 0px 0px 0px; ">
+<label style="color:#000; font-weight:bold; font-size:16px;">DUE AMOUNT : </label>
+<label id="txtdue" style="color:#F00; font-weight:bold; font-size:16px;">00/-</label>
+</div>
+</div>
+<!-- paymentdetail end-->
+<!-- staffdetail start-->
+<div class="cusform">
+
+<div style="width:100%; display:block; overflow:hidden;
+padding:10px 0px 10px 0px;  box-shadow: 0px 0.5px 0px 0px #000; background:#000; ">
+<label style="color:#FFF; margin:0px 0px 0px 10px; font-weight:bold; font-size:16px; text-decoration:underline;">RECEIVER DETAILS </label>
+</div>
+<div style="width:100%; margin:20px 0px 0px 0px; display:block; ">
+<label style="color:#000;  font-weight:bold; font-size:16px;">NAME : </label>
+<label id="lblcname" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold;" ></label>
+<input id="txtcname" type="text" placeholder="Enter theName" style="border:1px #000 solid; padding:3px 0px 3px 10px; font-size:14px; " />
+  </div>
+<div style="width:100%; margin:20px 0px 0px 0px; display:block; ">
+<label style="color:#000;  font-weight:bold; font-size:16px;">NRIC :</label>
+<label id="lblcnri" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold;" ></label>
+<input id="txtcnri" type="text" placeholder="Enter the NRIC" style="border:1px #000 solid; padding:3px 0px 3px 10px; font-size:14px; " />
+</div>
+
+<div style="width:100%; display:block; margin:20px 0px 0px 0px; ">
+<label style="color:#000; font-weight:bold; font-size:16px;">CONTACT NUMBER :</label>
+<label id="lblcno" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold;" ></label>
+<input id="txtcno" type="text" placeholder="Enter the Contact Number" style="border:1px #000 solid; padding:3px 10px 3px 10px; font-size:14px; " />
+<label id="lblcnoerr" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold; color:#F00;" ></label>
+</div>
+
+<div style="width:100%; display:block; margin:20px 0px 0px 0px; ">
+<label style="color:#000; font-weight:bold; font-size:16px;">DATE :</label>
+<label id="lblcdate" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold;" ></label>
+<input id="txtcdate" type="text" placeholder="Enter the Date" style="border:1px #000 solid; padding:3px 0px 3px 10px; font-size:14px; " />
+</div>
+
+<div style="width:100%; display:block; margin:20px 0px 0px 0px; ">
+<label style="color:#000; font-weight:bold; font-size:16px;">SIGNATURE : </label>
+ <img id="canvasimg" style="border:none; width:250px; height:150px;"/>
+<input type="button" id="Sig" name="Sig" value="Add SIGNATURE"/>
+</div>
+</div>
+<!-- staffdetail end-->
+<!-- customdetail start-->
+<div class="staffform">
+<div style="width:100%; display:block; overflow:hidden;
+padding:10px 0px 10px 0px;  box-shadow: 0px 0.5px 0px 0px #000; background:#000; ">
+<label style="color:#FFF; margin:0px 0px 0px 10px; font-weight:bold; font-size:16px; text-decoration:underline;">STAFF DETAILS </label>
+</div>
+<div style="width:100%; margin:20px 0px 0px 0px; display:block; ">
+<label style="color:#000;  font-weight:bold; font-size:16px;">NAME : </label>
+<label id="lblsname" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold;" ></label>
+<input id="txtsname" type="text" placeholder="Enter theName" style="border:1px #000 solid; padding:3px 0px 3px 10px; font-size:14px; " />
+  </div>
+<div style="width:100%; margin:20px 0px 0px 0px; display:block; ">
+<label  style="color:#000;  font-weight:bold; font-size:16px;">NRIC :</label>
+<label id="lblsnri" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold;" ></label>
+<input type="text" id="txtsnri" placeholder="Enter the NRIC" style="border:1px #000 solid; padding:3px 0px 3px 10px; font-size:14px; " />
+</div>
+
+
+<div style="width:100%; display:block; margin:20px 0px 0px 0px; ">
+<label style="color:#000; font-weight:bold; font-size:16px;">CONTACT NUMBER :</label>
+<label id="lblsno" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold;" ></label>
+<input type="text" id="txtsno" placeholder="Enter the Contact Number" style="border:1px #000 solid; padding:3px 10px 3px 10px; font-size:14px; " />
+<label id="lblsnoerr" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold; color:#F00;" ></label>
+</div>
+
+<div style="width:100%; display:block; margin:20px 0px 0px 0px; ">
+<label style="color:#000; font-weight:bold; font-size:16px;">DATE :</label>
+<label id="lblsdate" style="padding:3px 0px 3px 10px; font-size:14px; font-weight:bold;" ></label>
+<input id="txtsdate" type="text" placeholder="Enter the Date" style="border:1px #000 solid; padding:3px 0px 3px 10px; font-size:14px; " />
+</div>
+
+<div style="width:100%; display:block; margin:20px 0px 0px 0px; ">
+<label style="color:#000; font-weight:bold; font-size:16px;">SIGNATURE : </label>
+ <img id="canvasimg1" style="border:none; width:250px; height:150px;"/>
+<input type="button" id="Sig1" name="Sig1" value="Add SIGNATURE"/>
+</div>
+</div>
+<!-- customdetail end-->
+
+</div>
+<!-- field end-->
+
+<!-- footer start-->
+<div style="display:block; width:100%; margin:20px 0px 0px 0px ; background:#014037; overflow:hidden; padding:5px 0px 5px 0px;">
+<p style="color:#FFF; text-align:center; padding:0px 20px 0px 20px;  font-weight:bold; font-size:16px;">
+ZERODOTONE • REGISTRATION NUMBER: 53262873W • 10 ANSON ROAD, #26-04, INTERNATIONAL PLAZA, SINGAPORE 079903 • WWW.ZERODOTONE.COM.SG
+</p>
+</div>
+<!-- footer end-->
+
+<div style="display:block; width:100%; margin:40px auto 0px auto ; overflow:hidden; padding:5px 0px 5px 0px;">
+<input type="button" id="print" name="PRINT" value="PRINT" style="border:none; background:#930; font-size:20px; padding:10px 10px 10px 10px; color:#FFF;"/>
+<input type="button" id="submit" name="Sbmit" value="Submit" style="border:none; background:#930; font-size:20px; padding:10px 10px 10px 10px; color:#FFF;"/>
+</div>
+
+</div>
+</div>
+
+
+
+</body>
+</html>
